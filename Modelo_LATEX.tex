@@ -1,0 +1,243 @@
+\documentclass[10pt,brazil,english]{article}
+\usepackage{amsfonts}
+\usepackage{infocomp}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[english, portuguese]{babel}
+\addto\captionsportuguese{
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\refname}{REFER\^{E}NCIAS}
+}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{setspace} % espacamento entre linhas
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{scalefnt}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage[sort,compress]{cite}
+\usepackage[alf,abnt-repeated-author-omit=yes,abnt-etal-list=0]{abntex2cite}	% CitaÃ§Ãµes padrÃ£o ABNT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\usepackage{mathtools}
+\setcounter{page}{1}
+\fancyhead{ }
+\lhead{}
+\chead{\footnotesize }
+\rhead{}
+\cfoot{Universidade Federal de Lavras, julho 2019}
+\rfoot{\thepage}%Direita do Rodapé
+\renewcommand{\headrulewidth}{1pt}% Traço horizontal no cabeçalho
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{rangecite}
+
+\usepackage{listings}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\lstdefinelanguage{JavaScript}{
+  keywords={do, if, in, for, let, new, try, var, case, else, enum, eval, null, this, true, void, with, await, break, catch, class, const, false, super, throw, while, yield, delete, export, import, public, return, static, switch, typeof, default, extends, finally, package, private, continue, debugger, function, arguments, interface, protected, implements, instanceof},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  keywordstyle=\color{cyan}\bfseries,
+  ndkeywordstyle=\color{black}\bfseries,
+  identifierstyle=\color{black},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  sensitive=true
+}
+
+\lstset{
+   language=JavaScript,
+%   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+%   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=true,
+   captionpos=b
+}
+
+\sloppy
+\renewcommand{\captionfont}{\footnotesize}
+\renewcommand{\captionlabelfont}{\footnotesize \bfseries}
+\title{TÍTULO DO ARTIGO}
+
+\address{Universidade Federal de Lavras (UFLA)}
+
+\author{Gustavo Nunes de Moura, Ricardo Terra}
+
+\selectlanguage{brazil}
+
+\abstract{Abstract}
+
+\keywords{Key. Words.}
+
+\selectlanguage{brazil}
+
+\resumo {Resumo do artigo aqui}
+
+\palchaves{Palavras. Chave.}
+
+
+%\receivedate{July 19th, 2011}
+%\acceptdate{September 1st, 2011}
+
+\begin{document}
+\pagestyle{fancy} % CABECALHOO
+
+\maketitle
+\newpage
+
+
+\section{Introdução}
+% Modificar para ficar mais proximo de uma melhoria proposta para deixar testes automaticos mais acessiveis.
+Durante o desenvolvimento e evolução de um sistema baseado na arquitetura de micro-serviços, um dos desafios encontrados é a manutenção de interfaces de comunicação e o compartilhamento de dados. Normalmente essas interfaces de comunicação são baseadas no protocolo HTTP, porem também podem ser serviços externos como filas de mensagens (Simple Queue Service da Amazon), servidores de arquivos (S3 da Amazon), bancos de dados SQL, bancos de dados NoSql, entre outros. 
+
+Um meio utilizado para aumentar a qualidade e confiança na criação e evolução de funcionalidades é o desenvolvimento de testes automatizados. Porem existem algumas limitações para a industria como o elevado custo inicial para o desenvolvimento dos testes, falta de pessoal especializado e o custo de manutenção dos testes.
+
+Existem várias ferramentas maduras para o desenvolvimento e realização de testes automatizados como Jest, Mocha e Tape, todas voltadas para o desenvolvimento de testes de em aplicações NodeJS, mas podem também ser utilizadas para desenvolver testes de integração entre serviços escritos em outros frameworks ou linguagens. O uso dessas ferramentas diminuem o custo inicial do desenvolvimento dos testes, porem em micro-serviços integrados a múltiplos serviços externos, bancos de dados e servidores de arquivos os testes a se tornam mais custosos e verbosos devido a necessidade de desenvolver a integração com cada um desses serviços.
+
+Este artigo, portanto, propõe GustAPI, uma biblioteca escrita em JavaScript e executada no NodeJs, que possa ser utilizada com ferramentas de teste já existentes, com o intuito de diminuir a verbosidade de testes que envolvam a verificação de ações em múltiplas interfaces, oferecendo uma forma padronizada de configurar o acesso e funções que facilitem a validação de modificações em serviços externos.
+
+Uma avaliação comparativa demonstra que GustAPI melhora a legibilidade e manutenção de testes com múltiplas integrações, diminuindo o numero de linhas e deixando o código mais descritivo e menos verboso.
+
+Esse artigo está organizado como a seguir. A seção 2 traz um referencial teórico sobre micro-serviços, testes de software e ferramentas de teste. A seção 3 apresenta avaliações comparativas entre algumas ferramentas utilizadas pela industria e uma breve discussão sobre os resultados. A seção 4 apresenta a biblioteca proposta. A seção 5 apresenta comparações entre a ferramenta Jest e Jest com a GustAPI e uma breve discussão sobre os resultados. A seção 6 traz trabalhos relacionados. A seção 7 apresenta uma conclusão e trabalhos futuros. 
+
+\section{Background}
+\subsection{Testes de Software}
+Testes de software são um processo no qual um sistema é executado com a finalidade de encontrar erros, normalmente divididos em dois métodos de teste: caixa-branca e caixa-preta \cite{myers2004art}. Testes de caixa-preta são testes realizados sem observar o funcionamento interno do sistema, considerando apenas os dados de entrada e saída. Já os testes de caixa-branca são realizados levando em consideração a estrutura interna do sistema com o intuito de executar cada declaração do programa pelo menos uma vez. Nesse campo de estudo existem diferentes fases de teste, por exemplo \cite{thakare2012software}:
+\begin{itemize}
+\item \textbf{Teste de unidade:} Fase de teste onde o objetivo é testar cada componente ou unidade de software para validar a sua funcionalidade de forma independente, garantindo que ele funcione corretamente como unidade;
+\item \textbf{Teste de integração:} Fase de teste onde é validado se diferentes componentes de uma aplicação funcionam bem quando integrados;
+\item \textbf{Teste de validação:} Fase de testes realizada com validações de alto nível utilizando critérios definidos normalmente durante o levantamento de requisitos, tem como finalidade assegurar que a aplicação desenvolvida atinja todos os requisitos funcionais, comportamentais e de performance;
+\end{itemize}
+
+\subsection{Testes de integração}
+Utilizar essa sessão para descrever os testes de integração, buscar literatura branca!
+
+Testes de integração são um desafio enfrentado por desenvolvedores, especialmente em grandes aplicações com vários sub-sistemas e interfaces \cite{tsai2001end}.
+
+\subsection{Ferramentas}
+\subsubsection{Jest}
+O framework Jest é um framework de testes robusto e com diversas configurações e funcionalidades, projetado para ser executado sem qualquer configuração, escrito em JavaScript pode ser executado no Node.js ou browser de forma paralela com processos independes ou sequencial em apenas um processo.
+
+\lstinputlisting[language=JavaScript, caption=Exemplo de teste de integração utilizando Mocha]{teste-minimo-jest.js}
+
+\subsubsection{Mocha}
+Mocha é um framework de execução de testes com diversas funcionalidades, escrito em JavaScript e executado no Node.js ou browser de forma sequencial. Um aspecto interessante desse framework é a falta de funções de validação, na documentação são indicados vários módulos que realizam validações de forma simples e direta, dentre eles o módulo ChaiJS, o módulo utilizado para realizar as validações nos testes desenvolvidos para realizar este trabalho.
+
+\lstinputlisting[language=JavaScript, caption=Exemplo de teste de integração utilizando Mocha]{teste-minimo-mocha.js}
+
+\subsubsection{Tape}
+Tape é um framework de execução testes extremamente simples, escrito em JavaScript que é executado no Node.js ou browser, mentem um conjunto mínimo de funcionalidades que são expandidas através da adição de módulos, alguns deles listados em sua documentação.
+
+\lstinputlisting[language=JavaScript, caption=Exemplo de teste de integração utilizando Tape]{teste-minimo-tape.js}
+
+\section{Análise comparativa}
+\subsection{Ferramentas comparadas}
+Foi realizada uma busca na internet com a finalidade de escolher trés ferramentas de execução de testes maduras, com licença aberta, bem documentadas, configuráveis e prontas para serem utilizadas em uma fabrica de software. As ferramentas escolhidas foram Jest, Mocha e Tape.
+
+\subsection{Metodologia}
+Para realizar a comparação entre as trés ferramentas, foram elaborados treze roteiros de testes com intuito de validar a integração de um micro-serviço ao serviço de armazenamento de arquivos Amazon S3, serviço de mensageiria da Amazon SQS, serviço de banco de dados SQL oferecido pela Oracle e o sistema de arquivos de um servidor Linux, e os testes foram implementados utilizando cada uma das ferramentas escolhidas.
+
+O micro-serviço testado pertence a empresa Equals SA e realiza a triagem de arquivos recebidos em um servidor Linux. Durante o processo de triagem o arquivo é registrado no banco de dados, cópias são enviadas para servidores de backup, o recebimento é notificado a outros serviços e o arquivo movimentado para diretórios pré-definidos.
+
+O comparativo das ferramentas foi separado em duas partes, uma comparação de funcionalidades entre as ferramentas e uma comparação de linhas de código (LOC). Para realizar a contagem de linhas de código a ferramenta utilizada foi Cloc\cite{cloc}.
+
+\subsection{Análise e  discussão dos resultados}
+Quando analisando a comparação de LOC \ref{tab:comparacao-loc} fica evidente que as diferentes ferramentas não apresentam diferenças significativas na sua implementação, os testes implementados ficaram praticamente idênticos, se diferenciando apenas as chamadas de funções de cada ferramenta e diferentes módulos importados. 
+
+\begin{table}[!hbtp]
+\centering
+\begin{tabular}{l|c|c|c|}
+\cline{2-4}
+\textit{}                           & Jest  & Mocha & Tape  \\ \hline
+\multicolumn{1}{|l|}{Média LOC}     & 304   & 304   & 307   \\ \hline
+\multicolumn{1}{|l|}{Desvio Padrão} & 63,29 & 63,48 & 63,44 \\ \hline
+\end{tabular}
+\caption{Tabela de comparação de linhas de código.}
+\label{tab:comparacao-loc}
+\end{table}
+
+A similaridade entre os testes se dá principalmente pela quantidade de código necessário para utilizar os serviços integrados a aplicação testada, mais da metade do código escrito são acesso aos serviços.
+
+Por outro lado, quando comparamos a funcionalidades padrão de cada uma, Mocha e Jest são e claramente mais robustas que Tape. 
+
+\begin{table}[!hbtp]
+\centering
+\begin{tabular}{r|c|c|c|}
+\cline{2-4}
+\multicolumn{1}{l|}{}                             & \multicolumn{3}{c|}{Ferramentas} \\ \hline
+\multicolumn{1}{|r|}{Funcionalidades}             & Tape       & Mocha       & Jest       \\ \hline
+\multicolumn{1}{|r|}{API Assert}                  & Sim        & Não         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Suporte a codigo assincrono} & Não        & Sim         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Execução no browser}         & Sim        & Sim         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Ações pré e pós teste}       & Não        & Sim         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Integração com banco sql}    & Não        & Não         & Não        \\ \hline
+\multicolumn{1}{|r|}{Integração com banco nosql}  & Não        & Não         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Integração com React}        & Não        & Não         & Sim        \\ \hline
+\multicolumn{1}{|r|}{Integração com SDK Aws}      & Não        & Não         & Não        \\ \hline
+
+\end{tabular}
+\caption{Tabela de comparação de funcionalidades.}
+\label{tab:comparacao-funcionalidades}
+\end{table}
+
+Jest é a ferramenta mais completa das trés. Além de todas as funcionalidades, a configuração é muito simples e existe muito material para estudo disponível de forma gratuita criado pela comunidade. 
+
+\section{API desenvolvida}
+A API proposta tem como principal motivação facilitar o desenvolvimento de testes que envolvam interfaces de diferentes serviços. Para atingir esse objetivo a API foi dividida em duas partes principais, os construtores de acesso a serviços e ações.
+
+Com o intuito de padronizar as configurações de cada interface implementada, os construtores de acesso a serviços seguem o design pattern Builder, dessa forma a configuração e montagem de interfaces é encapsulada, dando flexibilidade para modificações na forma de configuração de acesso do serviço implementadas na API sem a necessidade de modificações nos construtores de acesso a serviços. Assim, quando o método 'build' de um construtor é chamado, o usuário recebe um objeto que será a sua interface de acesso ao serviço. As ações por outro lado são métodos que realizam modificações ou leitura de dados nos serviços, como demonstrado no exemplo de código:
+
+\lstinputlisting[language=JavaScript, caption=Exemplo de teste de integração utilizando Jest + GustAPI]{teste-minimo-jest-gustapi.js}
+
+\section{Avaliação API}
+\subsection{Ferramentas comparadas}
+Descrever as ferramentas comparadas e tabela 3.3 Jest | Jest + API
+
+\subsection{Metodologia}
+Descrição do comparativo de funcionalidades providas, 13 testes nas 2
+Descrição do comparativo de cada teste em relação a verbosidade, LOC...
+
+\subsection{Análise e  discussão dos resultados}
+Escrever sobre os testes e concluir que Jest + API é o melhor.
+
+\subsection{Trabalhos relacionados}
+6 Trabalhos relacionados
+
+\subsection{Considerações finais}
+1 paragrafo contextualizando o PROBLEMA
+1 paragrafo contextualizando o SOLUÇÃO
+1 paragrafo contextualizando o RESULTADO
+
+\bibliography{Referencias}
+
+%\anex
+%\begin{anexosenv}
+%\onecolumn
+% ---
+
+\end{document} 
